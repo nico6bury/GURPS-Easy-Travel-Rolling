@@ -34,7 +34,7 @@ namespace EasyTravelRolling
             this.uxRollStuff = new System.Windows.Forms.Button();
             this.uxButtonPanel = new System.Windows.Forms.GroupBox();
             this.uxOutputGroup = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.uxRollOutput = new System.Windows.Forms.TextBox();
             this.uxOptionsGroup.SuspendLayout();
             this.uxButtonPanel.SuspendLayout();
             this.uxOutputGroup.SuspendLayout();
@@ -69,6 +69,7 @@ namespace EasyTravelRolling
             this.uxRollStuff.TabIndex = 1;
             this.uxRollStuff.Text = "Roll Stuff";
             this.uxRollStuff.UseVisualStyleBackColor = false;
+            this.uxRollStuff.Click += new System.EventHandler(this.RollStuff);
             // 
             // uxButtonPanel
             // 
@@ -81,22 +82,22 @@ namespace EasyTravelRolling
             // 
             // uxOutputGroup
             // 
-            this.uxOutputGroup.Controls.Add(this.textBox1);
+            this.uxOutputGroup.Controls.Add(this.uxRollOutput);
             this.uxOutputGroup.Location = new System.Drawing.Point(12, 97);
             this.uxOutputGroup.Name = "uxOutputGroup";
             this.uxOutputGroup.Size = new System.Drawing.Size(776, 341);
             this.uxOutputGroup.TabIndex = 3;
             this.uxOutputGroup.TabStop = false;
             // 
-            // textBox1
+            // uxRollOutput
             // 
-            this.textBox1.BackColor = System.Drawing.Color.DimGray;
-            this.textBox1.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.textBox1.Location = new System.Drawing.Point(6, 26);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(764, 309);
-            this.textBox1.TabIndex = 0;
+            this.uxRollOutput.BackColor = System.Drawing.Color.DimGray;
+            this.uxRollOutput.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.uxRollOutput.Location = new System.Drawing.Point(6, 26);
+            this.uxRollOutput.Multiline = true;
+            this.uxRollOutput.Name = "uxRollOutput";
+            this.uxRollOutput.Size = new System.Drawing.Size(764, 309);
+            this.uxRollOutput.TabIndex = 0;
             // 
             // TravelRoller
             // 
@@ -128,7 +129,7 @@ namespace EasyTravelRolling
         private System.Windows.Forms.Button uxRollStuff;
         private System.Windows.Forms.GroupBox uxButtonPanel;
         private System.Windows.Forms.GroupBox uxOutputGroup;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox uxRollOutput;
     }
 }
 

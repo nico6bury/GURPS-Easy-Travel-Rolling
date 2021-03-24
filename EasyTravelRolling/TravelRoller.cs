@@ -29,6 +29,23 @@ namespace EasyTravelRolling
         Southwest
     }//end enum Direction
 
+    enum Disaster
+    {
+        FallingRocks,
+        FallingTree,
+        Fire,
+        Flow,
+        FreakWave,
+        LightningStrike,
+        Quicksand,
+        Sinkhole,
+        Stampede,
+        StingingPlants,
+        Swarm,
+        ThinIce,
+        Tornado,
+    }
+
     public partial class TravelRoller : Form
     {
         private Random r = new Random();
@@ -65,10 +82,11 @@ namespace EasyTravelRolling
         private List<int> RollDice(int diceNum)
         {
             List<int> dice = new List<int>();
+
             
             for (int i = 0; i < diceNum; i++)
             {
-                dice[i] = r.Next(1, 7);
+                dice.Add(r.Next(1, 7));
             }//end looping for each dice number
             
             return dice;
@@ -198,6 +216,156 @@ namespace EasyTravelRolling
             }//end else no river
         }//end RollForRiver(targetNum, diceForWidth)
 
+        /// <summary>
+        /// roll 3d to check for any natural disasters that might happen
+        /// </summary>
+        private string RollForDisaster(int targetNum, List<Disaster> allowedDisasters)
+        {
+            return "";
+        }//end RollForDisaster(targetNum, allowedDisasters)
 
+        private string RollForWeirdness(int targetNum)
+        {
+            if (RollDiceWithTarget(targetNum, 3))
+            {
+                StringBuilder sb = new StringBuilder();
+                int rolledNum = SumList(RollDice(1));
+                switch (rolledNum)
+                {
+                    case int n when (n >= 1 && n <= 2):
+                        sb.Append("Space is looped in this area. Travel progress" +
+                            " won\'t continue until the players notice and change" +
+                            " course. Perhaps Per-3 if similar looking area?");
+                        break;
+                    case int n when (n >= 3 && n <= 4):
+                        Direction[] directions = (Direction[])Enum.GetValues(typeof(Direction));
+                        Direction direction = directions[r.Next(8)];
+                        sb.Append("Space is oddly connected here. The position" +
+                            " they\'re facing changes randomly, with them suddenly" +
+                            $" facing to the {direction}. They progress" +
+                            $" {SumList(RollDice(5))} miles if they fail Per check." +
+                            " Otherwise, they get a chance to find where space " +
+                            "is warped.");
+                        break;
+                    case int n when (n >= 5 && n <= 6):
+                        sb.Append($"The size of space here is bigger than normal." +
+                            $" Scale is {SumList(RollDice(2))}:{SumList(RollDice(4))} for space and boundry" +
+                            $" is {SumList(RollDice(5))} miles across as diameter");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException($"The result of" +
+                            $" {rolledNum} when rolling 1d6 is invalid");
+                }//end switch case
+
+                return sb.ToString();
+            }//end if weirdness applies
+            else
+            {
+                return String.Empty;
+            }//end else weirdness does not apply
+        }//end RollForWeirdness()
+
+        /// <summary>
+        /// rolls 3d to check for wandering monsters. Empty string if none found
+        /// </summary>
+        private string RollForWanderingMonsters(int targetNum,
+            List<WanderingMonster> possibleMonsters)
+        {
+            if(dSix <= targetNum)
+            {
+                int index = r.Next(possibleMonsters.Count);
+                WanderingMonster monster = possibleMonsters[index];
+                return $"Party encounters a wandering {monster}";
+            }//end if there's a monster
+            else
+            {
+                return String.Empty;
+            }//end else there's no monster
+        }//end RollForWanderingMonsters(targetNum)
+
+        /// <summary>
+        /// Just gets a hardcoded list of monsters
+        /// </summary>
+        private List<WanderingMonster> GetMonsters()
+        {
+            List<WanderingMonster> monsters = new List<WanderingMonster>();
+            
+            string name = "Troll";
+            string pageref = "Dungeon Fantasy Monsters 1 page 31";
+            string desc = "Trolls are good as a lone boss monster encountered" +
+                " alone I think.";
+            monsters.Add(new WanderingMonster(name, desc, pageref));
+
+            name = "Watcher At The Edge Of Time";
+            pageref = "Dungeon Fantasy Monsters 1 page 34";
+            desc = "Watchers At The Edge Of Time can be potentially encountered" +
+                " anywhere in the Mana Planes. Only lone one, sighted at a distance" +
+                " because I don't want to wipe the party.";
+            monsters.Add(new WanderingMonster(name, desc, pageref));
+
+            name = "Slake Hound";
+            pageref = "Creatures of the Night Volume 1 page 19";
+            desc = "Slake Hounds can be encountered on the plains, especially at" +
+                " night. They attacj in great numbers and attack the PCs. Nice.";
+            monsters.Add(new WanderingMonster(name, desc, pageref));
+
+            name = "Uroth";
+            pageref = "Creatures of the Night Volume 1 page 24";
+            desc = "Urth Herd is grazing nearby. I give the PC's some sort of roll" +
+                " to let them know about the creatures, basically grazers that have" +
+                " valuable items in their stomachs.";
+            monsters.Add(new WanderingMonster(name, desc, pageref));
+
+            name = "Clatternorn";
+            pageref = "Creatures of the Night Volume 4 page 5";
+            desc = "Clatternorn is encountered during a storm and chases the party. " +
+                "It foreces them to either kill the monster or take their chances " +
+                "with crumbling roads during a dangerous storm.";
+            monsters.Add(new WanderingMonster(name, desc, pageref));
+
+            name = "Waste-Stalker";
+            pageref = "Creatures of the Night Volume 4 page 14";
+            desc = "Waste-Stalker packs are unfortunately somewhat common around " +
+                "The Wrecked Lands, leading to extensive spacial anomalies and " +
+                "temporal distortions.";
+            monsters.Add(new WanderingMonster(name, desc, pageref));
+
+            name = "Gully Dragon";
+            pageref = "Cretures of the Night Volume 5 page 9";
+            desc = "Gully Dragon is a nice encounter for when the party travels " +
+                "near a watering hole. Considering it can be tamed, the party " +
+                "could also adopt it.";
+            monsters.Add(new WanderingMonster(name, desc, pageref));
+
+            return monsters;
+        }//end GetMonsters()
+
+        /// <summary>
+        /// click event for rolling a day/night
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RollStuff(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            List<Direction> allowedDirections = new List<Direction>();
+            allowedDirections.Add(Direction.North);
+            allowedDirections.Add(Direction.Northwest);
+            allowedDirections.Add(Direction.Northeast);
+
+            sb.AppendLine(RollWind(5, allowedDirections));
+
+            sb.AppendLine(RollNastyWeather(true));
+
+            sb.AppendLine(RollForRiver(9, 10));
+
+            sb.AppendLine(RollForDisaster(6, null));
+
+            sb.AppendLine(RollForWanderingMonsters(9, GetMonsters()));
+
+            sb.AppendLine(RollForWeirdness(6));
+
+            uxRollOutput.Text = sb.ToString();
+        }//end RollStuff(sender, e)
     }//end partial class
 }//end namespace
